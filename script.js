@@ -1,38 +1,3 @@
-let userType;
-const defaultUsername = "user";
-const defaultPassword = "123";
-
-function openLogin(type) {
-    userType = type;
-    document.getElementById('loginPage').classList.add('hidden');
-    document.getElementById('loginForm').classList.remove('hidden');
-    document.getElementById('loginTitle').innerText = `Login as ${capitalize(type)}`;
-}
-
-function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function login() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    // Validate username and password
-    if (username === defaultUsername && password === defaultPassword) {
-        alert(`${capitalize(userType)} logged in successfully!`);
-        document.getElementById('loginForm').classList.add('hidden');
-        document.getElementById('dashboard').classList.remove('hidden');
-        updateDashboard();
-    } else {
-        // Show error message
-        document.getElementById('error').classList.remove('hidden');
-    }
-}
-
-function signup() {
-    alert(`Sign up for ${capitalize(userType)} is complete!`);
-}
-
 function updateDashboard() {
     const country = document.getElementById('countrySelector').value;
     document.getElementById('selectedCountry').innerText = country;
@@ -82,56 +47,8 @@ function updateChart(country) {
     conflictChart.update();
 }
 
-function showMoreDetails() {
-    const country = document.getElementById('countrySelector').value;
-    document.getElementById('dashboard').classList.add('hidden');
-    document.getElementById('conflictDetailsPage').classList.remove('hidden');
-    document.getElementById('detailsCountry').innerText = country;
-
-    // Fetch and display conflict details
-    displayConflictDetails(country);
-}
-
-function displayConflictDetails(country) {
-    const details = {
-        "USA": {
-            count: 120,
-            animalDeaths: 100,
-            humanDeaths: 5,
-            damagingAnimals: "Deer, Bears"
-        },
-        "India": {
-            count: 200,
-            animalDeaths: 150,
-            humanDeaths: 15,
-            damagingAnimals: "Elephants, Tigers"
-        },
-        "Africa": {
-            count: 300,
-            animalDeaths: 200,
-            humanDeaths: 30,
-            damagingAnimals: "Buffalos, Hippos"
-        },
-        "Brazil": {
-            count: 150,
-            animalDeaths: 80,
-            humanDeaths: 10,
-            damagingAnimals: "Jaguar, Tapir"
-        }
-    };
-
-    const { count, animalDeaths, humanDeaths, damagingAnimals } = details[country];
-    document.getElementById('conflictCount').innerText = count;
-    document.getElementById('animalDeaths').innerText = animalDeaths;
-    document.getElementById('humanDeaths').innerText = humanDeaths;
-    document.getElementById('damagingAnimals').innerText = damagingAnimals;
-}
-
-function goBack() {
-    document.getElementById('conflictDetailsPage').classList.add('hidden');
-    document.getElementById('dashboard').classList.remove('hidden');
-}
-
 window.onload = function () {
     createChart();
+    updateDashboard(); // Initialize with default country
 };
+
