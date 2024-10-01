@@ -7,7 +7,26 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-   
+    <!-- Login Page -->
+    <div id="loginPage">
+        <h1>Forest Monitoring System</h1>
+        <button onclick="openLogin('stakeholder')">Login as Stakeholder</button>
+        <button onclick="openLogin('forest_official')">Login as Forest Official</button>
+        <button onclick="openLogin('end_user')">Login as End User</button>
+    </div>
+
+    <!-- Login Forms -->
+    <div id="loginForm" class="hidden">
+        <h2 id="loginTitle"></h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" placeholder="Enter username"><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter password"><br>
+        <button onclick="login()">Login</button>
+        <button onclick="signup()">Sign Up</button>
+        <p id="error" class="error hidden">Invalid username or password</p>
+    </div>
+
     <!-- Dashboard -->
     <div id="dashboard" class="hidden">
         <h1>Forest Conflict Dashboard</h1>
@@ -17,10 +36,6 @@
             <option value="Africa">Africa</option>
             <option value="Brazil">Brazil</option>
         </select>
-        
-        <div class="button-container">
-            <button onclick="showMoreDetails()">More Details</button>
-        </div>
 
         <!-- Pie Chart for Conflict Causes -->
         <div id="chartContainer">
@@ -33,19 +48,150 @@
         </div>
     </div>
 
-    <!-- Conflict Details Page -->
-    <div id="conflictDetailsPage" class="hidden">
-        <h2>Details for <span id="detailsCountry">U.S.A</span></h2>
-        <p><strong>Number of Conflicts in a Year:</strong> <span id="conflictCount"></span></p>
-        <p><strong>Death of Animals:</strong> <span id="animalDeaths"></span></p>
-        <p><strong>Death of Humans:</strong> <span id="humanDeaths"></span></p>
-        <p><strong>Animals Causing Most Damage:</strong> <span id="damagingAnimals"></span></p>
-        <button onclick="goBack()">Back to Dashboard</button>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.hidden {
+    display: none;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5cb85c;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #4cae4c;
+}
+
+#error {
+    color: red;
+    font-weight: bold;
+}
+
+#chartContainer {
+    width: 400px;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    color: #333;
+}
+
+p {
+    color: #666;
+}
+
+
+
+let userType;
+const defaultUsername = "user";
+const defaultPassword = "123";
+
+function openLogin(type) {
+    userType = type;
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('loginForm').classList.remove('hidden');
+    document.getElementById('loginTitle').innerText = `Login as ${capitalize(type)}`;
+}
+
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Validate username and password
+    if (username === defaultUsername && password === defaultPassword) {
+        alert(`${capitalize(userType)} logged in successfully!`);
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        updateDashboard();
+    } else {
+        // Show error message
+        document.getElementById('error').classList.remove('hidden');
+    }
+}
+
+function signup() {
+    alert(`Sign up for ${capitalize(userType)} is complete!`);
+}
+
+function updateDashboard() {
+    const country = document.getElementById('countrySelector').value;
+    document.getElementById('selectedCountry').innerText = country;
+    const conflictDescription = getConflictDescription(country);
+    document.getElementById('conflictDescription').innerText = conflictDescription;
+
+    // Update pie chart data
+    updateChart(country);
+}
+
+function getConflictDescription(country) {
+    const descriptions = {
+        "USA": "Conflict over deforestation in the U.S.A.",
+        "India": "Conflict due to illegal logging in India.",
+        "Africa": "Conflict over land use in Africa.",
+        "Brazil": "Conflict between communities in Brazil."
+    };
+    return descriptions[country];
+}
+
+// Chart.js setup
+let conflictChart;
+
+function createChart() {
+    const ctx = document.getElementById('conflictChart').getContext('2d');
+    conflictChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Deforestation', 'Illegal Logging', 'Land Use', 'Community Conflict'],
+            datasets: [{
+                data: [40, 30, 20, 10], // Default values
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+            }]
+        }
+    });
+}
+
+function updateChart(country) {
+    const dataMap = {
+        "USA": [40, 30, 20, 10],
+        "India": [25, 35, 20, 20],
+        "Africa": [15, 45, 30, 10],
+        "Brazil": [10, 20, 50, 20]
+    };
+
+    conflictChart.data.datasets[0].data = dataMap[country];
+    conflictChart.update();
+}
+
+window.onload = function () {
+    createChart();
+};
 
 
