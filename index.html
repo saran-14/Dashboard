@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forest Monitoring Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage">
+        <h1>Forest Monitoring System</h1>
+        <button onclick="openLogin('stakeholder')">Login as Stakeholder</button>
+        <button onclick="openLogin('forest_official')">Login as Forest Official</button>
+        <button onclick="openLogin('end_user')">Login as End User</button>
+    </div>
+
+    <!-- Login Forms -->
+    <div id="loginForm" class="hidden">
+        <h2 id="loginTitle"></h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" placeholder="Enter username"><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter password"><br>
+        <button onclick="login()">Login</button>
+        <button onclick="signup()">Sign Up</button>
+        <p id="error" class="error hidden">Invalid username or password</p>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden">
+        <h1>Forest Conflict Dashboard</h1>
+        <select id="countrySelector" onchange="updateDashboard()">
+            <option value="USA">U.S.A</option>
+            <option value="India">India</option>
+            <option value="Africa">Africa</option>
+            <option value="Brazil">Brazil</option>
+        </select>
+        
+        <div class="button-container">
+            <button onclick="showMoreDetails()">More Details</button>
+        </div>
+
+        <!-- Pie Chart for Conflict Causes -->
+        <div id="chartContainer">
+            <canvas id="conflictChart"></canvas>
+        </div>
+
+        <div id="countryDetails">
+            <h2>Conflict Details for <span id="selectedCountry">U.S.A</span></h2>
+            <p id="conflictDescription">Conflict description for the selected country will appear here.</p>
+        </div>
+    </div>
+
+    <!-- Conflict Details Page -->
+    <div id="conflictDetailsPage" class="hidden">
+        <h2>Details for <span id="detailsCountry">U.S.A</span></h2>
+        <p><strong>Number of Conflicts in a Year:</strong> <span id="conflictCount"></span></p>
+        <p><strong>Death of Animals:</strong> <span id="animalDeaths"></span></p>
+        <p><strong>Death of Humans:</strong> <span id="humanDeaths"></span></p>
+        <p><strong>Animals Causing Most Damage:</strong> <span id="damagingAnimals"></span></p>
+        <button onclick="goBack()">Back to Dashboard</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
+
